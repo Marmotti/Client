@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ClientTcp</string>
+    <string name="message_prompt">Your message here:</string>
+    <string name="et_hint">Message</string>
+    <string name="pending_status">Status&#8230;</string>
+    <string name="send_button">Send</string>
+    <string name="conversation_title">Conversation:</string>
+    <string name="msg_disconnected">Disconected from the server</string>
+    <string name="msg_problem">Problem in connection..!</string>
+</resources>
