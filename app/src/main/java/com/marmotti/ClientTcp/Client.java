@@ -15,7 +15,7 @@ import java.net.UnknownHostException;
 class Client {
 
     private static final String TAG = Client.class.getSimpleName();
-    private static final String SERVER_IP = "192.168.1.8"; //server IP address
+    private static final String SERVER_IP = "10.0.2.2"; //server IP address
     private static final int SERVER_PORT = 6666;
 
     // message to send to the server
