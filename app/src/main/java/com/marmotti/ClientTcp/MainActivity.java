@@ -1,7 +1,13 @@
 package com.marmotti.ClientTcp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.security.acl.Permission;
 import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,34 +53,45 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Context context = this.getApplicationContext();
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED)
+            ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.CAMERA}, 5);
+
+
         //Accessing views
-        final EditText message = findViewById(R.id.etMsg);
         final TextView status = findViewById(R.id.tvStatus);
-        Button send = findViewById(R.id.bSend);
-        final TextView conversation = findViewById(R.id.tvConversation);
+        Button start = findViewById(R.id.bStart);
+        Button stop = findViewById(R.id.bStop);
+        final TextView response = findViewById(R.id.tvResponse);
+
 
         try {
             new ConnectTask().execute("");
-            send.setOnClickListener(new View.OnClickListener() {
+            start.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (client != null) {
-                        String currentMessage = message.getText().toString();
-                        if (!currentMessage.isEmpty()) {
-                            if (currentMessage.trim().equals("QUIT")) {
-                                client.stopClient();
-                                status.setText(R.string.msg_disconnected);
-                            } else {
-                                client.sendMessage(currentMessage);
-                                conversation.append(currentMessage);
-                            }
-                        }
+                        client.run();
                     }
                     else {
                         status.setText(R.string.msg_problem);
                     }
                 }
             });
+
+            stop.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (client != null) {
+                        client.stop();
+                    }
+                    else {
+                        status.setText(R.string.msg_problem);
+                    }
+                }
+            });
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
